@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internships</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen">
+  <main class="max-w-6xl mx-auto py-8 px-4">
+    <div class="bg-white rounded-xl shadow p-6 mb-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Open Internships</h1>
+      <div class="flex gap-2">
+        <a href="/" class="bg-slate-200 px-3 py-2 rounded">Home</a>
+        <a href="/post-opportunity.html" class="bg-emerald-600 text-white px-3 py-2 rounded">Post Opportunity</a>
+        <button id="logoutBtn" class="bg-red-600 text-white px-3 py-2 rounded">Logout</button>
+      </div>
+    </div>
+
+    <div id="message" class="text-sm mb-3"></div>
+    <div id="list" class="grid md:grid-cols-2 gap-4"></div>
+  </main>
+
+  <script>
+    const list = document.getElementById("list");
+    const message = document.getElementById("message");
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+    function authHeaders() {
+      return token ? { Authorization: `Bearer ${token}` } : {};
+    }
+
+    async function fetchInternships() {
+      try {
+        const res = await fetch("/api/internships");
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to load internships");
+
+        list.innerHTML = "";
+        data.forEach((item) => {
+          const isOwner = role === "employer" && user.id === item.employer?._id;
+          const card = document.createElement("div");
+          card.className = "bg-white rounded-xl shadow p-5";
+          card.innerHTML = `
+            <h2 class="text-xl font-semibold">${item.title}</h2>
+            <p class="text-slate-700 mt-2">${item.description}</p>
+            <p class="text-sm mt-2"><strong>Location:</strong> ${item.location}</p>
+            <p class="text-sm mt-1"><strong>Company:</strong> ${item.employer?.companyName || "N/A"}</p>
+            <p class="text-sm mt-1"><strong>Skills:</strong> ${(item.requiredSkills || []).join(", ") || "N/A"}</p>
+            ${isOwner ? `
+              <div class="flex gap-2 mt-4">
+                <button data-action="edit" data-id="${item._id}" class="px-3 py-2 rounded bg-amber-500 text-white">Edit</button>
+                <button data-action="delete" data-id="${item._id}" class="px-3 py-2 rounded bg-red-600 text-white">Delete</button>
+              </div>
+            ` : ""}
+          `;
+          list.appendChild(card);
+        });
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = "text-red-600 text-sm mb-3";
+      }
+    }
+
+    list.addEventListener("click", async (e) => {
+      const id = e.target.dataset.id;
+      const action = e.target.dataset.action;
+      if (!id || !action) return;
+      if (!token || role !== "employer") {
+        message.textContent = "Employer login required";
+        message.className = "text-red-600 text-sm mb-3";
+        return;
+      }
+
+      try {
+        if (action === "delete") {
+          const res = await fetch(`/api/internships/${id}`, {
+            method: "DELETE",
+            headers: { ...authHeaders() },
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || "Delete failed");
+          message.textContent = data.message;
+          message.className = "text-emerald-700 text-sm mb-3";
+        }
+
+        if (action === "edit") {
+          const title = prompt("New title (leave blank to keep):");
+          const location = prompt("New location (leave blank to keep):");
+          const payload = {};
+          if (title) payload.title = title;
+          if (location) payload.location = location;
+
+          const res = await fetch(`/api/internships/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              ...authHeaders(),
+            },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || "Update failed");
+          message.textContent = data.message;
+          message.className = "text-emerald-700 text-sm mb-3";
+        }
+
+        fetchInternships();
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = "text-red-600 text-sm mb-3";
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "/login.html";
+    });
+
+    fetchInternships();
+  </script>
+</body>
+</html>

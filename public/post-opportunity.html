@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Opportunity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen">
+  <main class="max-w-xl mx-auto py-12 px-4">
+    <div class="bg-white rounded-xl shadow p-6">
+      <h1 class="text-2xl font-bold mb-5">Post Internship Opportunity</h1>
+      <form id="postForm" class="space-y-4">
+        <input id="title" class="w-full border rounded px-3 py-2" placeholder="Title" required />
+        <textarea id="description" class="w-full border rounded px-3 py-2" placeholder="Description" required></textarea>
+        <input id="location" class="w-full border rounded px-3 py-2" placeholder="Location" required />
+        <input id="requiredSkills" class="w-full border rounded px-3 py-2" placeholder="Required skills (comma separated)" />
+        <button class="w-full bg-emerald-600 text-white rounded px-4 py-2 hover:bg-emerald-700">Create Internship</button>
+      </form>
+      <p id="message" class="text-sm mt-4"></p>
+      <div class="flex gap-3 mt-3">
+        <a href="/employer-dashboard.html" class="text-blue-600 text-sm">Back to dashboard</a>
+        <a href="/internships.html" class="text-blue-600 text-sm">View internships</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    const form = document.getElementById("postForm");
+    const message = document.getElementById("message");
+
+    if (!token || role !== "employer") {
+      window.location.href = "/login.html";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      message.textContent = "";
+
+      const payload = {
+        title: document.getElementById("title").value.trim(),
+        description: document.getElementById("description").value.trim(),
+        location: document.getElementById("location").value.trim(),
+        requiredSkills: document.getElementById("requiredSkills").value
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean),
+      };
+
+      try {
+        const res = await fetch("/api/internships", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Creation failed");
+        message.textContent = "Internship posted successfully";
+        message.className = "text-emerald-700 text-sm mt-4";
+        form.reset();
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = "text-red-600 text-sm mt-4";
+      }
+    });
+  </script>
+</body>
+</html>

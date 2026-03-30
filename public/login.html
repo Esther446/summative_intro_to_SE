@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen">
+  <main class="max-w-lg mx-auto py-12 px-4">
+    <div class="bg-white rounded-xl shadow p-6">
+      <h1 class="text-2xl font-bold mb-5">Login</h1>
+      <form id="loginForm" class="space-y-4">
+        <select id="role" class="w-full border rounded px-3 py-2" required>
+          <option value="student">Student</option>
+          <option value="employer">Employer</option>
+        </select>
+        <input id="email" type="email" class="w-full border rounded px-3 py-2" placeholder="Email" required />
+        <input id="password" type="password" class="w-full border rounded px-3 py-2" placeholder="Password" required />
+        <button class="w-full bg-slate-800 text-white rounded px-4 py-2 hover:bg-slate-900">Login</button>
+      </form>
+      <p id="message" class="text-sm mt-4"></p>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      message.textContent = "";
+
+      const role = document.getElementById("role").value;
+      const payload = {
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value,
+      };
+
+      const endpoint = role === "student" ? "/api/students/login" : "/api/employers/login";
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Login failed");
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.user.role);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        window.location.href = data.user.role === "student"
+          ? "/student-dashboard.html"
+          : "/employer-dashboard.html";
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = "text-red-600 text-sm mt-4";
+      }
+    });
+  </script>
+</body>
+</html>
