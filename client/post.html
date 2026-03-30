@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Opportunity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 transition duration-300 min-h-screen p-6">
+  <div class="max-w-xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-3xl font-bold">Post Opportunity</h1>
+      <div class="flex gap-3 items-center">
+        <button onclick="toggleDark()" class="px-3 py-2 rounded-lg border hover:scale-105 transition">
+          🌙
+        </button>
+      </div>
+    </div>
+
+    <form id="postForm" class="bg-white p-6 rounded-2xl shadow-sm space-y-4">
+      <div>
+        <label class="text-sm font-medium">Title</label>
+        <input id="title" class="w-full border rounded px-3 py-2 mt-1" placeholder="Title" required>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Description</label>
+        <textarea id="description" class="w-full border rounded px-3 py-2 mt-1" placeholder="Description" required></textarea>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Location</label>
+        <input id="location" class="w-full border rounded px-3 py-2 mt-1" placeholder="Location" required>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Required Skills (comma separated)</label>
+        <input id="requiredSkills" class="w-full border rounded px-3 py-2 mt-1" placeholder="Node.js, Express, MongoDB">
+      </div>
+
+      <button class="w-full bg-emerald-600 text-white rounded-xl px-4 py-2 hover:bg-emerald-700 transition hover:scale-[1.01]">
+        Create Internship
+      </button>
+      <p id="message" class="text-sm"></p>
+      <a href="/internships.html" class="text-sm text-indigo-600 hover:underline block">Back to internships</a>
+    </form>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000/api';
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
+    if (!token || role !== 'employer') {
+      window.location.href = '/register.html';
+    }
+
+    const form = document.getElementById('postForm');
+    const messageEl = document.getElementById('message');
+
+    function toggleDark(){
+      document.body.classList.toggle("bg-gray-900");
+      document.body.classList.toggle("text-white");
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      messageEl.textContent = '';
+
+      const payload = {
+        title: document.getElementById('title').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        location: document.getElementById('location').value.trim(),
+        requiredSkills: document.getElementById('requiredSkills').value
+          ? document.getElementById('requiredSkills').value
+              .split(',')
+              .map(s => s.trim())
+              .filter(Boolean)
+          : [],
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/internships`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Creation failed');
+        messageEl.textContent = 'Internship posted successfully';
+        messageEl.className = 'text-sm text-emerald-700';
+        form.reset();
+        setTimeout(() => window.location.href = '/internships.html', 600);
+      } catch (err) {
+        messageEl.textContent = err.message;
+        messageEl.className = 'text-sm text-red-600';
+      }
+    });
+  </script>
+</body>
+</html>

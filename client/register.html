@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 transition duration-300 min-h-screen flex items-center justify-center p-6">
+  <button onclick="toggleDark()" class="absolute top-6 right-6 px-3 py-2 rounded-lg border hover:scale-105 transition">
+    🌙
+  </button>
+
+  <div class="bg-white p-8 rounded-2xl shadow-lg text-center w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-4">Register As</h2>
+    <p class="text-gray-600 mb-6">Choose your role to continue.</p>
+
+    <div class="flex flex-col gap-4">
+      <button
+        onclick="goStudent()"
+        class="bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 hover:scale-[1.02] transition">
+        Student
+      </button>
+
+      <button
+        onclick="goEmployer()"
+        class="border border-gray-300 py-3 rounded-xl hover:bg-gray-100 hover:scale-[1.02] transition">
+        Employer
+      </button>
+    </div>
+
+    <div class="mt-6">
+      <a href="/" class="text-sm text-indigo-600 hover:underline">Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    function toggleDark(){
+      document.body.classList.toggle("bg-gray-900");
+      document.body.classList.toggle("text-white");
+    }
+
+    function goStudent(){
+      window.location.href = "/student-register.html";
+    }
+
+    function goEmployer(){
+      window.location.href = "/employer-register.html";
+    }
+  </script>
+</body>
+</html>
