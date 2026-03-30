@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const Employer = require('../models/Employer');
+const generateToken = require('../utils/token');
 
 // @desc    Register a new employer
 // @route   POST /api/employers/register
@@ -8,26 +8,35 @@ const registerEmployer = async (req, res, next) => {
   try {
     const { companyName, email, password } = req.body;
 
-    // 1. Generate salt
-    const salt = await bcrypt.genSalt(10);
+    if (!companyName || !email || !password) {
+      return res.status(400).json({ message: 'companyName, email, and password are required' });
+    }
+    if (String(password).length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
 
-    // 2. Hash password
+    const normalizedEmail = String(email || '').toLowerCase().trim();
+
+    const existingEmployer = await Employer.findOne({ email: normalizedEmail });
+    if (existingEmployer) {
+      return res.status(409).json({ message: 'Email is already registered' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 3. Save employer with hashed password
     const employer = new Employer({
       companyName,
-      email,
+      email: normalizedEmail,
       password: hashedPassword
     });
 
     await employer.save();
 
-    // Password is never returned — schema has select: false on password field
-    res.status(201).json({
-      message: 'Employer registered successfully',
-      employer
-    });
+    const token = generateToken(employer, 'employer');
+
+    // Contract required by Postman/MVP: token + role only
+    return res.status(201).json({ token, role: 'employer' });
 
   } catch (error) {
     next(error);
@@ -39,31 +48,29 @@ const registerEmployer = async (req, res, next) => {
 const loginEmployer = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = String(email || '').toLowerCase().trim();
 
-    // 1. Find employer and include password explicitly
-    const employer = await Employer.findOne({ email }).select('+password');
+    const employer = await Employer.findOne({ email: normalizedEmail }).select('+password');
 
     if (!employer) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // 2. Compare password
     const isMatch = await bcrypt.compare(password, employer.password);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // 3. Create token
-    const token = jwt.sign(
-      { id: employer._id, role: 'employer' },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-
     res.json({
       message: 'Login successful',
-      token
+      token: generateToken(employer, 'employer'),
+      user: {
+        id: employer._id,
+        role: 'employer',
+        companyName: employer.companyName,
+        email: employer.email,
+      }
     });
 
   } catch (error) {

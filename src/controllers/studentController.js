@@ -1,33 +1,40 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const Student = require('../models/Student');
+const generateToken = require('../utils/token');
 
 // @desc    Register a new student
 // @route   POST /api/students/register
 const registerStudent = async (req, res, next) => {
   try {
     const { name, email, password, skills } = req.body;
+    const normalizedEmail = String(email || '').toLowerCase().trim();
 
-    // 1. Generate salt
+    const existingStudent = await Student.findOne({ email: normalizedEmail });
+    if (existingStudent) {
+      return res.status(409).json({ message: 'Email is already registered' });
+    }
+
     const salt = await bcrypt.genSalt(10);
-
-    // 2. Hash password
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    // 3. Save student with hashed password
     const student = new Student({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       skills
     });
 
     await student.save();
 
-    // Password not returned because schema has select: false
     res.status(201).json({
       message: 'Student registered successfully',
-      student
+      token: generateToken(student, 'student'),
+      user: {
+        id: student._id,
+        role: 'student',
+        name: student.name,
+        email: student.email,
+        skills: student.skills,
+      }
     });
 
   } catch (error) {
@@ -41,31 +48,30 @@ const registerStudent = async (req, res, next) => {
 const loginStudent = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = String(email || '').toLowerCase().trim();
 
-    // 1. Find student and include password explicitly
-    const student = await Student.findOne({ email }).select('+password');
+    const student = await Student.findOne({ email: normalizedEmail }).select('+password');
 
     if (!student) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // 2. Compare password
     const isMatch = await bcrypt.compare(password, student.password);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // 3. Create token
-    const token = jwt.sign(
-      { id: student._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
     res.json({
       message: 'Login successful',
-      token
+      token: generateToken(student, 'student'),
+      user: {
+        id: student._id,
+        role: 'student',
+        name: student.name,
+        email: student.email,
+        skills: student.skills,
+      }
     });
 
   } catch (error) {
@@ -79,17 +85,21 @@ const loginStudent = async (req, res, next) => {
 // @access  Protected
 const getStudentProfile = async (req, res, next) => {
   try {
-    // req.student is attached by protectStudent middleware
     const student = req.student;
 
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
 
-    // Remove password from response
-    student.password = undefined;
-
-    res.status(200).json({ student });
+    res.status(200).json({
+      user: {
+        id: student._id,
+        role: 'student',
+        name: student.name,
+        email: student.email,
+        skills: student.skills,
+      }
+    });
 
   } catch (error) {
     next(error);

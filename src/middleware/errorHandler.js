@@ -20,8 +20,12 @@ const errorHandler = (err, req, res, next) => {
 
   res.status(statusCode).json({
     message: err.message || 'Internal Server Error',
-    status: statusCode,
+    status: statusCode
   });
 };
 
-module.exports = errorHandler;
+const notFound = (req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+};
+
+module.exports = { errorHandler, notFound };

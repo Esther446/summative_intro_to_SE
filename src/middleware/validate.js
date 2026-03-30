@@ -5,6 +5,9 @@ const validateStudent = (req, res, next) => {
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'name, email, and password are required' });
   }
+  if (String(password).length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters' });
+  }
 
   next();
 };
@@ -16,7 +19,18 @@ const validateEmployer = (req, res, next) => {
   if (!companyName || !email || !password) {
     return res.status(400).json({ message: 'companyName, email, and password are required' });
   }
+  if (String(password).length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters' });
+  }
 
+  next();
+};
+
+const validateLogin = (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: 'email and password are required' });
+  }
   next();
 };
 
@@ -47,6 +61,7 @@ function validateApplication(req, res, next) {
 module.exports = {
   validateStudent,
   validateEmployer,
+  validateLogin,
   validateInternship,
   validateApplication,
 };
