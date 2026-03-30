@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Internships</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-10">
+<h1 class="text-3xl font-bold mb-6">Available Internships</h1>
+<div id="internships" class="grid md:grid-cols-3 gap-6"></div>
+
+<script>
+fetch('http://localhost:5000/api/internships')
+.then(res => res.json())
+.then(data => {
+  const container = document.getElementById('internships');
+  data.forEach(i => {
+    container.innerHTML += `
+      <div class="p-6 border rounded-xl shadow">
+        <h3 class="font-semibold text-lg">${i.title}</h3>
+        <p class="text-gray-600">${i.description}</p>
+        <p class="text-sm">${i.location}</p>
+      </div>`;
+  });
+});
+</script>
+</body>
+</html>

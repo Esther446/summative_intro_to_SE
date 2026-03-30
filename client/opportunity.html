@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post Internship</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-10">
+<h1 class="text-3xl font-bold mb-6">Post Opportunity</h1>
+<form id="postForm" class="space-y-4 max-w-lg">
+<input class="w-full border p-2" placeholder="Title" id="title">
+<textarea class="w-full border p-2" placeholder="Description" id="description"></textarea>
+<input class="w-full border p-2" placeholder="Location" id="location">
+<button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded">Post</button>
+</form>
+
+<script>
+document.getElementById('postForm').addEventListener('submit', async e => {
+ e.preventDefault();
+ const token = localStorage.getItem('token');
+
+ await fetch('http://localhost:5000/api/internships',{
+   method:'POST',
+   headers:{
+     'Content-Type':'application/json',
+     'Authorization':'Bearer '+token
+   },
+   body:JSON.stringify({
+     title:title.value,
+     description:description.value,
+     location:location.value
+   })
+ });
+ alert('Posted!');
+});
+</script>
+</body>
+</html>
