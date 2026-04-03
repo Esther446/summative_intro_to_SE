@@ -1,317 +1,207 @@
-# 🎓 InternLink — Full-Stack Internship Platform
+# 🌍 InternLink
 
-A modern full-stack internship platform connecting **students** with **employers** through a secure, role-based system.
-Students discover opportunities. Employers post openings. Everything runs on a JWT-secured API.
-
----
-
-# 🚀 Features
-
-### 👩‍🎓 Students
-
-* Register & login
-* Browse internships
-* View internship details
-* Apply to opportunities
-* Personalized dashboard
-
-### 🏢 Employers
-
-* Register & login
-* Post internships
-* Edit internships
-* Delete internships
-* Manage opportunities from dashboard
-
-### 🔐 Authentication
-
-* JWT-based authentication
-* Role-based authorization
-* Protected routes
-* Token persistence (localStorage)
-
-### 🎨 UI/UX
-
-* TailwindCSS modern interface
-* Responsive layout
-* Dark mode toggle
-* Smooth animations
-* Clean dashboard experience
+### Bridging Skills to Opportunity for Africa’s Youth
 
 ---
 
-# 🏗️ Tech Stack
+## 🚀 The Problem
 
-### Frontend
+Youth unemployment remains one of the most pressing challenges across Africa.
+Millions of young people possess ambition and potential, yet face:
 
-* HTML
+* Limited access to internships and entry-level jobs
+* Fragmented information across multiple platforms
+* Lack of exposure to skills development resources
+* Weak connection between employers and emerging talent
+
+This results in a widening gap between **available talent** and **available opportunities**.
+
+---
+
+## 💡 The Solution
+
+**InternLink** is a lightweight digital platform designed to **connect African youth with skills, internships, and entry-level opportunities** in one centralized, accessible space.
+
+The platform aggregates opportunities, enables employers to post roles, and helps young people discover pathways to employment based on their interests and skills.
+
+---
+
+## 🎯 Mission
+
+To reduce youth unemployment in Africa by improving access to skills development, internships, and entry-level opportunities through an accessible, scalable digital platform.
+
+---
+
+## 🧭 Vision
+
+To become Africa’s leading opportunity infrastructure empowering young people to transition from learning to earning.
+
+---
+
+## ✨ Key Features
+
+### 👩‍🎓 For Youth
+
+* Create personal profiles
+* Discover internships and entry-level roles
+* Save opportunities
+* Access skills development resources
+* Receive recommendations based on interests and skills
+
+### 🏢 For Employers
+
+* Post internship and entry-level opportunities
+* Manage listings
+* Discover emerging talent
+* Contribute to youth employment
+
+### 📚 Skills & Career Development
+
+* Curated learning resources
+* Training programs and bootcamps
+* Career guidance content
+* Skill-based opportunity matching
+
+---
+
+## 🏗️ Product Overview
+
+InternLink is a **web-based platform** accessible on:
+
+* Smartphones
+* Tablets
+* Laptops
+* Desktop computers
+
+The system is designed to be:
+
+* Lightweight for low-bandwidth environments
+* Mobile-friendly
+* Easy to navigate for users with varying digital literacy
+* Scalable across regions
+
+---
+
+## 👥 Target Users
+
+### Primary Users
+
+Young people seeking:
+
+* Internships
+* Entry-level jobs
+* Skills development opportunities
+
+### Secondary Users
+
+Employers and organizations:
+
+* Posting opportunities
+* Engaging emerging talent
+* Supporting workforce development
+
+---
+
+## 🌍 Impact
+
+InternLink aims to:
+
+* Increase youth access to employment opportunities
+* Support skills development pathways
+* Reduce information barriers
+* Strengthen employer-talent connections
+* Contribute to economic growth across Africa
+
+---
+
+## 🔧 Technology
+
+**Frontend**
+
 * TailwindCSS
 * Vanilla JavaScript
-* Vite (dev server)
+* Responsive Web Design
 
-### Backend
+**Backend**
 
 * Node.js
 * Express.js
 * MongoDB
-* Mongoose
 * JWT Authentication
-* bcrypt password hashing
+
+**Architecture**
+
+* RESTful API
+* Role-based access control
+* Lightweight data exchange
 
 ---
 
-# 📁 Project Structure
+## 🔄 User Journey
 
-```
-project-root/
-│
-├── client/                 # Frontend (Vite)
-│   ├── index.html
-│   ├── register.html
-│   ├── internships.html
-│   ├── post-opportunity.html
-│   ├── student-dashboard.html
-│   ├── employer-dashboard.html
-│   └── scripts/
-│
-├── src/                    # Backend
-│   ├── controllers/
-│   │   ├── studentController.js
-│   │   ├── employerController.js
-│   │   └── internshipController.js
-│   │
-│   ├── models/
-│   │   ├── Student.js
-│   │   ├── Employer.js
-│   │   └── Internship.js
-│   │
-│   ├── routes/
-│   │   ├── studentRoutes.js
-│   │   ├── employerRoutes.js
-│   │   └── internshipRoutes.js
-│   │
-│   ├── middleware/
-│   │   └── auth.js
-│   │
-│   └── server.js
-│
-├── .env
-├── package.json
-└── README.md
-```
+### Youth User
 
----
-
-# ⚙️ Environment Variables
-
-Create a `.env` file in the root:
-
-```
-NODE_ENV=development
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/internlink
-JWT_SECRET=your_super_secret
-JWT_EXPIRES_IN=7d
-CORS_ORIGIN=http://localhost:5173
-```
-
----
-
-# 🛠️ Installation
-
-### 1. Clone repository
-
-```
-git clone <repo-url>
-cd internlink
-```
-
-### 2. Install dependencies
-
-```
-npm install
-```
-
-### 3. Start backend
-
-```
-npm run dev
-```
-
-Backend runs on:
-
-```
-http://localhost:5000
-```
-
-### 4. Start frontend (Vite)
-
-```
-cd client
-npm install
-npm run dev
-```
-
-Frontend runs on:
-
-```
-http://localhost:5173
-```
-
----
-
-# 🔌 API Endpoints
-
-### Students
-
-```
-POST /api/students/register
-POST /api/students/login
-```
-
-### Employers
-
-```
-POST /api/employers/register
-POST /api/employers/login
-```
-
-### Internships
-
-```
-GET    /api/internships
-GET    /api/internships/:id
-POST   /api/internships        (Employer only)
-PUT    /api/internships/:id    (Owner only)
-DELETE /api/internships/:id    (Owner only)
-```
-
----
-
-# 🔐 Authentication
-
-Protected routes require:
-
-```
-Authorization: Bearer <token>
-```
-
-Token stored in:
-
-```
-localStorage
-```
-
----
-
-# 🧪 Testing With Postman
-
-### Employer Register
-
-```
-POST /api/employers/register
-Content-Type: application/json
-
-{
-  "companyName": "Acme Inc",
-  "email": "hr@acme.com",
-  "password": "secret123"
-}
-```
-
-### Student Register
-
-```
-POST /api/students/register
-{
-  "name": "John Doe",
-  "email": "john@email.com",
-  "password": "secret123"
-}
-```
-
----
-
-# 🔄 User Flow
-
-### Student
-
-Landing → Register → Dashboard → Browse Internships → Apply
+Sign Up → Build Profile → Discover Opportunities → Save & Apply → Develop Skills
 
 ### Employer
 
-Landing → Register → Dashboard → Post Opportunity → Manage Listings
+Register → Post Opportunity → Manage Listings → Connect with Talent
 
 ---
 
-# 🌙 UI Features
+## 🚀 Current Status
 
-* Dark mode toggle
-* Smooth fade animations
-* Responsive layout
-* Clean dashboard cards
-* Tailwind-based styling
+Minimum Viable Product (MVP) includes:
 
----
-
-# 🚀 Deployment
-
-### Backend
-
-Deploy to:
-
-* Render
-* Railway
-* VPS
-* AWS
-
-### Frontend
-
-Deploy to:
-
-* Vercel
-* Netlify
-* GitHub Pages
-
-### Production Environment Variables
-
-```
-NODE_ENV=production
-MONGO_URI=<Atlas URI>
-JWT_SECRET=<strong-secret>
-CORS_ORIGIN=<frontend-url>
-```
+* User authentication
+* Opportunity listings
+* Employer posting system
+* Student dashboard
+* Responsive UI
 
 ---
 
-# 📸 Screenshots
+## 🔮 Roadmap
 
-Add screenshots here after UI polish:
-
-```
-/screenshots/landing.png
-/screenshots/dashboard.png
-```
-
----
-
-# 🔮 Future Improvements
-
-* Internship applications system
-* Resume upload
+* Skill-based recommendation engine
+* Application tracking system
+* Resume uploads
 * Email notifications
-* Search & filtering
-* Saved internships
-* Admin panel
+* Admin moderation panel
+* External job API integrations
+* Offline-friendly features
 
 ---
 
-# 👩‍💻 Author
+## 🤝 Why It Matters
 
-Built with ❤️ to connect students with real opportunities.
+Africa has one of the world’s youngest populations.
+Empowering youth with access to opportunities is essential for:
+
+* Economic growth
+* Innovation
+* Workforce development
+* Social stability
+
+InternLink is built to **unlock that potential**.
 
 ---
 
-# 📄 License
+## 📈 Long-Term Goal
 
-MIT License
+To evolve into a scalable ecosystem that connects:
+
+* Youth
+* Employers
+* Training providers
+* Career resources
+
+All within one accessible platform.
+
+---
+
+## 👩‍💻 Built With Purpose
+
+InternLink is designed with accessibility, scalability, and real-world impact at its core — focused on empowering the next generation of African talent.
+
+---
