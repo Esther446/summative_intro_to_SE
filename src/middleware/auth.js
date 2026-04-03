@@ -65,4 +65,25 @@ const protectEmployer = async (req, res, next) => {
   }
 };
 
-module.exports = { protectStudent, protectEmployer };
+const protectAdmin = async (req, res, next) => {
+  try {
+    const token = getBearerToken(req);
+
+    if (!token) {
+      return res.status(401).json({ message: 'Authorization token missing or invalid format' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    req.admin = { id: decoded.userId };
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Token invalid or expired' });
+  }
+};
+
+module.exports = { protectStudent, protectEmployer, protectAdmin };

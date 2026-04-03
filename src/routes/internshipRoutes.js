@@ -6,11 +6,12 @@ const {
   getAllInternships,
   getInternshipById,
   updateInternship,
-  deleteInternship
+  deleteInternship,
+  saveInternship
 } = require('../controllers/internshipController');
 
 const { validateInternship } = require('../middleware/validate');
-const { protectEmployer } = require('../middleware/auth');
+const { protectEmployer, protectStudent } = require('../middleware/auth');
 
 
 // GET /api/internships — public
@@ -27,5 +28,6 @@ router.put('/:id', protectEmployer, updateInternship);
 
 // DELETE /api/internships/:id — employer only
 router.delete('/:id', protectEmployer, deleteInternship);
+router.post('/:id/save', protectStudent, saveInternship);
 
 module.exports = router;

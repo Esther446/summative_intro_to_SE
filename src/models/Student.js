@@ -27,6 +27,15 @@ const studentSchema = new mongoose.Schema(
       type: [String],
       default: [],        // Prevents undefined bugs when no skills provided
     },
+    interests: {
+      type: [String],
+      default: [],
+    },
+    savedOpportunities: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Internship',
+      default: [],
+    },
     applications: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'Application',

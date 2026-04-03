@@ -13,12 +13,25 @@
         <h1 class="text-2xl font-bold">Student Dashboard</h1>
         <p id="welcome" class="text-slate-600"></p>
       </div>
-      <button id="logoutBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Logout</button>
+      <div class="flex gap-2">
+        <a href="/resources.html" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Skills Resources</a>
+        <a href="/internships.html" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Saved Opportunities</a>
+        <button id="logoutBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Logout</button>
+      </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow p-6">
-      <p class="mb-4">Browse available opportunities and apply externally from listing details.</p>
-      <a href="/internships.html" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View Internships</a>
+    <div id="message" class="text-sm mb-3"></div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <section class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-xl font-semibold mb-3">Saved Opportunities</h2>
+        <div id="savedList" class="space-y-3 text-sm text-slate-700"></div>
+      </section>
+
+      <section class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-xl font-semibold mb-3">Recommended For You</h2>
+        <div id="recommendedList" class="space-y-3 text-sm text-slate-700"></div>
+      </section>
     </div>
   </main>
 
@@ -31,11 +44,59 @@
       window.location.href = "/login.html";
     }
 
+    const message = document.getElementById("message");
+    const savedList = document.getElementById("savedList");
+    const recommendedList = document.getElementById("recommendedList");
+
+    function authHeaders() {
+      return { Authorization: `Bearer ${token}` };
+    }
+
+    function renderOpportunityCard(item) {
+      return `
+        <div class="border rounded-lg p-3">
+          <p class="font-semibold">${item.title}</p>
+          <p class="text-slate-600">${item.location}</p>
+          <p class="text-slate-600">Company: ${item.employer?.companyName || "N/A"}</p>
+          <p class="text-slate-500 text-xs mt-1">Skills: ${(item.requiredSkills || []).join(", ") || "N/A"}</p>
+        </div>
+      `;
+    }
+
+    async function fetchDashboard() {
+      message.textContent = "";
+      try {
+        const res = await fetch("/api/students/dashboard", {
+          headers: { ...authHeaders() },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to load dashboard");
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        const saved = data.savedOpportunities || [];
+        const recommended = data.recommendedOpportunities || [];
+
+        savedList.innerHTML = saved.length
+          ? saved.map(renderOpportunityCard).join("")
+          : `<p class="text-slate-500">No saved opportunities yet. Save from internships page.</p>`;
+
+        recommendedList.innerHTML = recommended.length
+          ? recommended.map(renderOpportunityCard).join("")
+          : `<p class="text-slate-500">No recommendations yet. Add skills to your profile.</p>`;
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = "text-red-600 text-sm mb-3";
+      }
+    }
+
     document.getElementById("welcome").textContent = `Welcome, ${user.name || "Student"} (${user.email || ""})`;
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.clear();
       window.location.href = "/login.html";
     });
+
+    fetchDashboard();
   </script>
 </body>
 </html>

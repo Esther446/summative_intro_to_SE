@@ -1,5 +1,7 @@
 const Internship = require('../models/Internship');
+const Student = require('../models/Student');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 // POST /api/internships
 const createInternship = async (req, res, next) => {
@@ -26,7 +28,32 @@ const createInternship = async (req, res, next) => {
 const getAllInternships = async (req, res, next) => {
   try {
     const internships = await Internship.find().populate('employer', 'companyName email');
-    res.status(200).json(internships);
+
+    const token = (req.headers.authorization || '').startsWith('Bearer ')
+      ? req.headers.authorization.split(' ')[1]
+      : null;
+
+    let recommended = [];
+
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded.role === 'student') {
+          const student = await Student.findById(decoded.userId);
+          const studentSkills = student?.skills || [];
+
+          if (studentSkills.length > 0) {
+            recommended = internships.filter((internship) =>
+              (internship.requiredSkills || []).some((skill) => studentSkills.includes(skill))
+            );
+          }
+        }
+      } catch (error) {
+        // Ignore invalid token and still return public internships list
+      }
+    }
+
+    res.status(200).json({ internships, recommended });
   } catch (error) {
     next(error);
   }
@@ -115,10 +142,43 @@ const deleteInternship = async (req, res, next) => {
   }
 };
 
+// POST /api/internships/:id/save
+const saveInternship = async (req, res, next) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid internship id' });
+    }
+
+    const internship = await Internship.findById(req.params.id);
+    if (!internship) {
+      return res.status(404).json({ message: 'Internship not found' });
+    }
+
+    const student = req.student;
+    const internshipId = internship._id.toString();
+    const alreadySaved = student.savedOpportunities.some((id) => id.toString() === internshipId);
+
+    if (alreadySaved) {
+      return res.status(200).json({ message: 'Internship already saved', savedOpportunities: student.savedOpportunities });
+    }
+
+    student.savedOpportunities.push(internship._id);
+    await student.save();
+
+    res.status(200).json({
+      message: 'Internship saved successfully',
+      savedOpportunities: student.savedOpportunities,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createInternship,
   getAllInternships,
   getInternshipById,
   updateInternship,
   deleteInternship,
+  saveInternship,
 };

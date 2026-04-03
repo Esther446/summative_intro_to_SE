@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { registerStudent, loginStudent, getStudentProfile } = require('../controllers/studentController');
+const {
+  registerStudent,
+  loginStudent,
+  getStudentProfile,
+  updateStudentProfile,
+  getStudentDashboard
+} = require('../controllers/studentController');
 const { protectStudent } = require('../middleware/auth');
 const { validateStudent, validateLogin } = require('../middleware/validate');
 
@@ -12,5 +18,7 @@ router.post('/login', validateLogin, loginStudent);
 
 // @route   GET /api/students/profile  (protected)
 router.get('/profile', protectStudent, getStudentProfile);
+router.put('/profile', protectStudent, updateStudentProfile);
+router.get('/dashboard', protectStudent, getStudentDashboard);
 
 module.exports = router;

@@ -12,6 +12,8 @@
       <h1 class="text-2xl font-bold">Open Internships</h1>
       <div class="flex gap-2">
         <a href="/" class="bg-slate-200 px-3 py-2 rounded">Home</a>
+        <a href="/resources.html" class="bg-indigo-600 text-white px-3 py-2 rounded">Skills Resources</a>
+        <a href="/student-dashboard.html" class="bg-blue-600 text-white px-3 py-2 rounded">Saved Opportunities</a>
         <a href="/post-opportunity.html" class="bg-emerald-600 text-white px-3 py-2 rounded">Post Opportunity</a>
         <button id="logoutBtn" class="bg-red-600 text-white px-3 py-2 rounded">Logout</button>
       </div>
@@ -32,14 +34,37 @@
       return token ? { Authorization: `Bearer ${token}` } : {};
     }
 
+    async function saveOpportunity(id) {
+      if (!token || role !== "student") {
+        throw new Error("Student login required");
+      }
+      const res = await fetch(`/api/internships/${id}/save`, {
+        method: "POST",
+        headers: { ...authHeaders() },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Save failed");
+      return data;
+    }
+
     async function fetchInternships() {
       try {
-        const res = await fetch("/api/internships");
+        const res = await fetch("/api/internships", {
+          headers: { ...authHeaders() },
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Failed to load internships");
 
+        const internships = Array.isArray(data) ? data : (data.internships || []);
+        const recommended = Array.isArray(data.recommended) ? data.recommended : [];
+
+        if (role === "student" && recommended.length) {
+          message.textContent = `You have ${recommended.length} recommended opportunities based on your skills.`;
+          message.className = "text-emerald-700 text-sm mb-3";
+        }
+
         list.innerHTML = "";
-        data.forEach((item) => {
+        internships.forEach((item) => {
           const isOwner = role === "employer" && user.id === item.employer?._id;
           const card = document.createElement("div");
           card.className = "bg-white rounded-xl shadow p-5";
@@ -53,6 +78,11 @@
               <div class="flex gap-2 mt-4">
                 <button data-action="edit" data-id="${item._id}" class="px-3 py-2 rounded bg-amber-500 text-white">Edit</button>
                 <button data-action="delete" data-id="${item._id}" class="px-3 py-2 rounded bg-red-600 text-white">Delete</button>
+              </div>
+            ` : ""}
+            ${role === "student" ? `
+              <div class="mt-4">
+                <button data-action="save" data-id="${item._id}" class="px-3 py-2 rounded bg-indigo-600 text-white">Save Opportunity</button>
               </div>
             ` : ""}
           `;
@@ -104,6 +134,12 @@
           const data = await res.json();
           if (!res.ok) throw new Error(data.message || "Update failed");
           message.textContent = data.message;
+          message.className = "text-emerald-700 text-sm mb-3";
+        }
+
+        if (action === "save") {
+          const saveResponse = await saveOpportunity(id);
+          message.textContent = saveResponse.message;
           message.className = "text-emerald-700 text-sm mb-3";
         }
 

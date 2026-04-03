@@ -15,6 +15,7 @@
         <input id="email" type="email" class="w-full border rounded px-3 py-2" placeholder="Email" required />
         <input id="password" type="password" class="w-full border rounded px-3 py-2" placeholder="Password (min 6 chars)" required />
         <input id="skills" class="w-full border rounded px-3 py-2" placeholder="Skills (comma separated)" />
+        <input id="interests" class="w-full border rounded px-3 py-2" placeholder="Interests (comma separated)" />
         <button class="w-full bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700">Register</button>
       </form>
       <p id="message" class="text-sm mt-4"></p>
@@ -35,6 +36,10 @@
         email: document.getElementById("email").value.trim(),
         password: document.getElementById("password").value,
         skills: document.getElementById("skills").value
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean),
+        interests: document.getElementById("interests").value
           .split(",")
           .map((s) => s.trim())
           .filter(Boolean),

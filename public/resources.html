@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skills Resources</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen">
+  <main class="max-w-5xl mx-auto py-8 px-4">
+    <div class="bg-white rounded-xl shadow p-6 mb-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Skills Resources</h1>
+      <div class="flex gap-2">
+        <a href="/student-dashboard.html" class="bg-blue-600 text-white px-3 py-2 rounded">Saved Opportunities</a>
+        <a href="/internships.html" class="bg-slate-200 px-3 py-2 rounded">Internships</a>
+      </div>
+    </div>
+
+    <div id="message" class="text-sm mb-3"></div>
+    <div id="resourceList" class="grid md:grid-cols-2 gap-4"></div>
+  </main>
+
+  <script>
+    const message = document.getElementById("message");
+    const resourceList = document.getElementById("resourceList");
+
+    function renderResource(item) {
+      return `
+        <article class="bg-white rounded-xl shadow p-5">
+          <h2 class="text-xl font-semibold">${item.title}</h2>
+          <p class="text-sm text-slate-600 mt-1">Type: ${item.type}</p>
+          <p class="text-sm text-slate-600 mt-1">Skills: ${(item.skills || []).join(", ") || "N/A"}</p>
+          <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-block mt-4 text-indigo-700 underline">Open Resource</a>
+        </article>
+      `;
+    }
+
+    async function fetchResources() {
+      message.textContent = "";
+      try {
+        const res = await fetch("/api/resources");
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to load resources");
+
+        resourceList.innerHTML = data.length
+          ? data.map(renderResource).join("")
+          : `<p class="text-slate-500">No resources available yet.</p>`;
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = "text-red-600 text-sm mb-3";
+      }
+    }
+
+    fetchResources();
+  </script>
+</body>
+</html>
