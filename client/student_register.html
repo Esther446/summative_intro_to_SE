@@ -18,41 +18,7 @@
 <button type="submit" class="bg-indigo-600 text-white w-full py-2 rounded hover:bg-indigo-700 transition">Register</button>
 </form>
 
-<script>
-function toggleDark(){
-  document.body.classList.toggle("bg-gray-900");
-  document.body.classList.toggle("text-white");
-}
-
-document.getElementById('studentForm').addEventListener('submit', async e => {
-  e.preventDefault();
-
-  const nameEl = document.getElementById('name');
-  const emailEl = document.getElementById('email');
-  const passwordEl = document.getElementById('password');
-
-  try {
-    const res = await fetch('http://localhost:5000/api/students/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: nameEl.value.trim(),
-        email: emailEl.value.trim(),
-        password: passwordEl.value,
-        skills: [],
-      })
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Registration failed');
-
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('role', 'student');
-    window.location = 'student-dashboard.html';
-  } catch (err) {
-    alert(err.message);
-  }
-});
-</script>
+<script src="/js/auth-storage.js"></script>
+<script src="/js/student-auth.js"></script>
 </body>
 </html>

@@ -50,10 +50,12 @@
     </form>
   </div>
 
+  <script src="/js/auth-storage.js"></script>
   <script>
     const API_BASE = 'http://localhost:5000/api';
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
+    const auth = window.authStorage ? window.authStorage.getAuthState() : { token: null, role: null };
+    const token = auth.token;
+    const role = auth.role;
 
     if (!token || role !== 'employer') {
       window.location.href = '/register.html';
