@@ -1,37 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InternHub - Internship Platform</title>
+  <title>InternLink | Launch Your Career</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
-  <header class="bg-white border-b">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <h1 class="text-xl font-bold">InternHub</h1>
-      <nav class="flex gap-3 text-sm">
-        <a href="/internships.html" class="px-3 py-2 rounded bg-slate-100 hover:bg-slate-200">Browse Internships</a>
-        <a href="/resources.html" class="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Skills Resources</a>
-        <a href="/student-dashboard.html" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Saved Opportunities</a>
-        <a href="/student-register.html" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Student Register</a>
-        <a href="/employer-register.html" class="px-3 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700">Employer Register</a>
-        <a href="/login.html" class="px-3 py-2 rounded bg-slate-800 text-white hover:bg-slate-900">Login</a>
+
+<body class="bg-gray-50 text-gray-800 transition duration-300" id="body">
+
+  <!-- Navbar -->
+  <header class="bg-white shadow-sm sticky top-0 z-50 transition">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-indigo-600">InternLink</h1>
+
+      <nav class="space-x-6 hidden md:block">
+        <a href="#features" class="text-gray-600 hover:text-indigo-600">Features</a>
+        <a href="#how" class="text-gray-600 hover:text-indigo-600">How it Works</a>
+        <a href="#contact" class="text-gray-600 hover:text-indigo-600">Contact</a>
       </nav>
+
+      <div class="flex gap-3 items-center">
+        <!-- Dark mode toggle -->
+        <button onclick="toggleDark()" class="px-3 py-2 rounded-lg border hover:scale-105 transition">
+          🌙
+        </button>
+
+        <button onclick="openGetStarted()"
+          class="bg-indigo-600 text-white px-4 py-2 rounded-xl shadow hover:bg-indigo-700 hover:scale-105 transition">
+          Get Started
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-4 py-12">
-    <section class="bg-white shadow rounded-xl p-8">
-      <h2 class="text-3xl font-bold mb-4">Launch your internship journey</h2>
-      <p class="text-slate-600 mb-6">
-        Students discover opportunities, employers post openings, and everything runs through secure JWT-based APIs.
-      </p>
-      <div class="flex flex-wrap gap-3">
-        <a href="/internships.html" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">View Open Roles</a>
-        <a href="/post-opportunity.html" class="px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700">Post Opportunity</a>
+  <!-- Hero -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="text-5xl font-bold leading-tight mb-6">
+          Connect Students <br>
+          With Real Opportunities
+        </h2>
+
+        <p class="text-lg text-gray-600 mb-8">
+          A modern internship platform designed to help students discover meaningful
+          opportunities and employers find top emerging talent effortlessly.
+        </p>
+
+        <div class="flex gap-4">
+          <button onclick="goToInternships()"
+            class="bg-indigo-600 text-white px-6 py-3 rounded-xl shadow hover:bg-indigo-700 hover:scale-105 transition">
+            Find Internships
+          </button>
+
+          <button onclick="goToPost()"
+            class="border border-gray-300 px-6 py-3 rounded-xl hover:bg-gray-100 hover:scale-105 transition">
+            Post Opportunity
+          </button>
+        </div>
       </div>
-    </section>
-  </main>
+
+      <div>
+        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1470"
+             class="rounded-2xl shadow-lg hover:scale-105 transition duration-500"
+             alt="Students collaborating">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold mb-12">Why Choose InternLink</h3>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="p-8 rounded-2xl shadow-sm border hover:shadow-md hover:-translate-y-1 transition">
+          <h4 class="text-xl font-semibold mb-3">Smart Matching</h4>
+          <p class="text-gray-600">Students get matched with internships based on skills and career goals.</p>
+        </div>
+
+        <div class="p-8 rounded-2xl shadow-sm border hover:shadow-md hover:-translate-y-1 transition">
+          <h4 class="text-xl font-semibold mb-3">Verified Employers</h4>
+          <p class="text-gray-600">All companies are screened to ensure quality opportunities.</p>
+        </div>
+
+        <div class="p-8 rounded-2xl shadow-sm border hover:shadow-md hover:-translate-y-1 transition">
+          <h4 class="text-xl font-semibold mb-3">Simple Applications</h4>
+          <p class="text-gray-600">Apply to internships in seconds with your student profile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works -->
+  <section id="how" class="py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-12">How It Works</h3>
+
+      <div class="grid md:grid-cols-3 gap-10 text-center">
+        <div>
+          <div class="text-indigo-600 text-4xl font-bold mb-3">1</div>
+          <h4 class="font-semibold text-lg mb-2">Create Profile</h4>
+          <p class="text-gray-600">Students build their professional profiles in minutes.</p>
+        </div>
+
+        <div>
+          <div class="text-indigo-600 text-4xl font-bold mb-3">2</div>
+          <h4 class="font-semibold text-lg mb-2">Explore Opportunities</h4>
+          <p class="text-gray-600">Browse internships tailored to your skills.</p>
+        </div>
+
+        <div>
+          <div class="text-indigo-600 text-4xl font-bold mb-3">3</div>
+          <h4 class="font-semibold text-lg mb-2">Apply Instantly</h4>
+          <p class="text-gray-600">Submit applications and track progress easily.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-indigo-600 text-white py-20">
+    <div class="max-w-4xl mx-auto text-center px-6">
+      <h3 class="text-3xl font-bold mb-4">Start Your Career Journey Today</h3>
+      <p class="mb-8 text-indigo-100">Join students and employers building the future together.</p>
+
+      <button onclick="openGetStarted()"
+        class="bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold shadow hover:bg-gray-100 hover:scale-105 transition">
+        Get Started Now
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="bg-gray-900 text-gray-400 py-10">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h4 class="text-white text-xl font-semibold mb-4">InternLink</h4>
+      <p class="mb-6">Connecting students to meaningful opportunities.</p>
+      <p class="text-sm">© 2026 InternLink. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Role Modal -->
+  <div id="roleModal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div class="bg-white p-8 rounded-2xl shadow-lg text-center w-80 animate-fade">
+      <h3 class="text-xl font-semibold mb-6">Register As</h3>
+
+      <div class="flex flex-col gap-4">
+        <button onclick="goStudent()"
+          class="bg-indigo-600 text-white py-2 rounded-xl hover:bg-indigo-700 transition">
+          Student
+        </button>
+
+        <button onclick="goEmployer()"
+          class="border py-2 rounded-xl hover:bg-gray-100 transition">
+          Employer
+        </button>
+      </div>
+
+      <button onclick="closeModal()" class="mt-6 text-gray-500 text-sm">Cancel</button>
+    </div>
+  </div>
+
+<script>
+/* DARK MODE */
+function toggleDark(){
+  document.body.classList.toggle("bg-gray-900");
+  document.body.classList.toggle("text-white");
+}
+
+/* NAVIGATION */
+function goToInternships(){
+  window.location.href = "/internships.html";
+}
+
+function goToPost(){
+  window.location.href = "/post.html";
+}
+
+/* GET STARTED */
+function openGetStarted(){
+  window.location.href = "/register.html";
+}
+
+function closeModal(){
+  document.getElementById("roleModal").classList.add("hidden");
+}
+
+function goStudent(){
+  window.location.href = "/student-register.html";
+}
+
+function goEmployer(){
+  window.location.href = "/employer-register.html";
+}
+</script>
+
 </body>
 </html>
