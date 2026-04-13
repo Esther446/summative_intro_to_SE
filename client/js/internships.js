@@ -61,7 +61,8 @@ async function fetchInternships() {
       const requiredSkills = Array.isArray(i.requiredSkills) ? i.requiredSkills.join(", ") : "";
       const employerName = i.employer?.companyName || "N/A";
 
-      const employerActions = isEmployer
+      // Backend tells us canManage — only true when JWT employer ID === internship.employer
+      const employerActions = (isEmployer && i.canManage)
         ? `
           <div class="flex gap-2 mt-4">
             <button data-action="edit" data-id="${i._id}" class="px-3 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition">

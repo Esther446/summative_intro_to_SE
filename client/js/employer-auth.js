@@ -86,7 +86,7 @@ async function submitEmployerAuth(e) {
       throw new Error(data.message || (isLoginMode ? "Login failed" : "Registration failed"));
     }
 
-    window.authStorage.setAuthState(data.token, "employer", isLoginMode ? rememberMe : true);
+    window.authStorage.setAuthState(data.token, "employer", isLoginMode ? rememberMe : true, data.user);
     window.location = "employer-dashboard.html";
   } catch (err) {
     alert(err.message);

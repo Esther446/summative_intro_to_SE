@@ -35,8 +35,16 @@ const registerEmployer = async (req, res, next) => {
 
     const token = generateToken(employer, 'employer');
 
-    // Contract required by Postman/MVP: token + role only
-    return res.status(201).json({ token, role: 'employer' });
+    return res.status(201).json({
+      token,
+      role: 'employer',
+      user: {
+        id: employer._id,
+        role: 'employer',
+        companyName: employer.companyName,
+        email: employer.email,
+      }
+    });
 
   } catch (error) {
     next(error);

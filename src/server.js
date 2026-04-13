@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const cors = require("cors");
 const express = require('express');
 const connectDB = require('./config/db');
@@ -18,9 +19,20 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ['http://localhost:5173', 'http://localhost:5000'],
   credentials: true
 }));
+
+// Serve client frontend
+const clientRoot = path.join(__dirname, '../client');
+app.use(express.static(path.join(clientRoot, 'public')));   // /hero.jpg etc.
+app.use('/js', express.static(path.join(clientRoot, 'js')));
+app.use('/styles', express.static(path.join(clientRoot, 'styles')));
+// HTML pages
+app.get('/', (req, res) => res.sendFile(path.join(clientRoot, 'index.html')));
+app.get('/:page.html', (req, res, next) => {
+  res.sendFile(path.join(clientRoot, `${req.params.page}.html`), err => err && next());
+});
 
 // Routes
 app.use('/api/students', studentRoutes);

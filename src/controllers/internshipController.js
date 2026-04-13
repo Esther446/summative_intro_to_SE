@@ -34,6 +34,7 @@ const getAllInternships = async (req, res, next) => {
       : null;
 
     let recommended = [];
+    let employerId = null;
 
     if (token) {
       try {
@@ -47,13 +48,22 @@ const getAllInternships = async (req, res, next) => {
               (internship.requiredSkills || []).some((skill) => studentSkills.includes(skill))
             );
           }
+        } else if (decoded.role === 'employer') {
+          employerId = decoded.userId.toString();
         }
       } catch (error) {
         // Ignore invalid token and still return public internships list
       }
     }
 
-    res.status(200).json({ internships, recommended });
+    // Tag each internship with canManage so the frontend knows what to show
+    const internshipsWithFlags = internships.map((i) => {
+      const obj = i.toObject();
+      obj.canManage = Boolean(employerId && obj.employer._id.toString() === employerId);
+      return obj;
+    });
+
+    res.status(200).json({ internships: internshipsWithFlags, recommended });
   } catch (error) {
     next(error);
   }
