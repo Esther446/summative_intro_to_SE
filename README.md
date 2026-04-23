@@ -172,4 +172,82 @@ All within one accessible platform.
 
 InternLink is designed with accessibility, scalability, and real-world impact at its core — focused on empowering the next generation of African talent.
 
----
+## Project Structure
+
+```plaintext
+summative_intro_to_SE/
+├── README.md
+├── package.json
+├── package-lock.json
+│
+├── client/
+│   ├── index.html
+│   ├── internship.html
+│   ├── internships.html
+│   ├── opportunity.html
+│   ├── post.html
+│   ├── register.html
+│   ├── employer-dashboard.html
+│   ├── employer-register.html
+│   ├── student-dashboard.html
+│   ├── student-register.html
+│   │
+│   ├── js/
+│   │   ├── auth-storage.js
+│   │   ├── employer-auth.js
+│   │   ├── employer-dashboard.js
+│   │   ├── internships.js
+│   │   ├── student-auth.js
+│   │   └── student-dashboard.js
+│   │
+│   ├── vite.config.js
+│   ├── eslint.config.js
+│   └── package.json
+│
+├── public/
+│   ├── index.html
+│   ├── internships.html
+│   ├── login.html
+│   ├── resources.html
+│   ├── post-opportunity.html
+│   ├── student-dashboard.html
+│   ├── student-register.html
+│   ├── employer-dashboard.html
+│   └── employer-register.html
+│
+├── src/
+│   ├── server.js
+│   │
+│   ├── config/
+│   │   └── db.js
+│   │
+│   ├── controllers/
+│   │   ├── applicationController.js
+│   │   ├── employerController.js
+│   │   ├── internshipController.js
+│   │   ├── resourceController.js
+│   │   └── studentController.js
+│   │
+│   ├── models/
+│   │   ├── Application.js
+│   │   ├── Employer.js
+│   │   ├── Internship.js
+│   │   ├── Resource.js
+│   │   └── Student.js
+│   │
+│   ├── routes/
+│   │   ├── index.js
+│   │   ├── applicationRoutes.js
+│   │   ├── employerRoutes.js
+│   │   ├── internshipRoutes.js
+│   │   ├── resourceRoutes.js
+│   │   └── studentRoutes.js
+│   │
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   ├── errorHandler.js
+│   │   └── validate.js
+│   │
+│   └── utils/
+│       └── token.js
+```
