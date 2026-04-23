@@ -1,10 +1,6 @@
-# 🌍 InternLink
+# InternLink - Bridging Skills to Opportunity for Africa’s Youth
 
-### Bridging Skills to Opportunity for Africa’s Youth
-
----
-
-## 🚀 The Problem
+## The Problem
 
 Youth unemployment remains one of the most pressing challenges across Africa.
 Millions of young people possess ambition and potential, yet face:
@@ -16,31 +12,23 @@ Millions of young people possess ambition and potential, yet face:
 
 This results in a widening gap between **available talent** and **available opportunities**.
 
----
-
-## 💡 The Solution
+## The Solution 
 
 **InternLink** is a lightweight digital platform designed to **connect African youth with skills, internships, and entry-level opportunities** in one centralized, accessible space.
 
 The platform aggregates opportunities, enables employers to post roles, and helps young people discover pathways to employment based on their interests and skills.
 
----
-
-## 🎯 Mission
+## Mission
 
 To reduce youth unemployment in Africa by improving access to skills development, internships, and entry-level opportunities through an accessible, scalable digital platform.
 
----
-
-## 🧭 Vision
+## Vision
 
 To become Africa’s leading opportunity infrastructure empowering young people to transition from learning to earning.
 
----
+## Key Features
 
-## ✨ Key Features
-
-### 👩‍🎓 For Youth
+### For Youth
 
 * Create personal profiles
 * Discover internships and entry-level roles
@@ -48,23 +36,21 @@ To become Africa’s leading opportunity infrastructure empowering young people 
 * Access skills development resources
 * Receive recommendations based on interests and skills
 
-### 🏢 For Employers
+### For Employers
 
 * Post internship and entry-level opportunities
 * Manage listings
 * Discover emerging talent
 * Contribute to youth employment
 
-### 📚 Skills & Career Development
+### Skills & Career Development
 
 * Curated learning resources
 * Training programs and bootcamps
 * Career guidance content
 * Skill-based opportunity matching
 
----
-
-## 🏗️ Product Overview
+## Product Overview
 
 InternLink is a **web-based platform** accessible on:
 
@@ -80,9 +66,7 @@ The system is designed to be:
 * Easy to navigate for users with varying digital literacy
 * Scalable across regions
 
----
-
-## 👥 Target Users
+## Target Users
 
 ### Primary Users
 
@@ -100,9 +84,7 @@ Employers and organizations:
 * Engaging emerging talent
 * Supporting workforce development
 
----
-
-## 🌍 Impact
+## Impact
 
 InternLink aims to:
 
@@ -112,9 +94,7 @@ InternLink aims to:
 * Strengthen employer-talent connections
 * Contribute to economic growth across Africa
 
----
-
-## 🔧 Technology
+## Technology
 
 **Frontend**
 
@@ -135,9 +115,7 @@ InternLink aims to:
 * Role-based access control
 * Lightweight data exchange
 
----
-
-## 🔄 User Journey
+## User Journey
 
 ### Youth User
 
@@ -147,9 +125,7 @@ Sign Up → Build Profile → Discover Opportunities → Save & Apply → Develo
 
 Register → Post Opportunity → Manage Listings → Connect with Talent
 
----
-
-## 🚀 Current Status
+## Current Status
 
 Minimum Viable Product (MVP) includes:
 
@@ -159,9 +135,7 @@ Minimum Viable Product (MVP) includes:
 * Student dashboard
 * Responsive UI
 
----
-
-## 🔮 Roadmap
+## Roadmap
 
 * Skill-based recommendation engine
 * Application tracking system
@@ -171,9 +145,7 @@ Minimum Viable Product (MVP) includes:
 * External job API integrations
 * Offline-friendly features
 
----
-
-## 🤝 Why It Matters
+## Why It Matters
 
 Africa has one of the world’s youngest populations.
 Empowering youth with access to opportunities is essential for:
@@ -185,9 +157,7 @@ Empowering youth with access to opportunities is essential for:
 
 InternLink is built to **unlock that potential**.
 
----
-
-## 📈 Long-Term Goal
+## Long-Term Goal
 
 To evolve into a scalable ecosystem that connects:
 
@@ -198,9 +168,7 @@ To evolve into a scalable ecosystem that connects:
 
 All within one accessible platform.
 
----
-
-## 👩‍💻 Built With Purpose
+## Built With Purpose
 
 InternLink is designed with accessibility, scalability, and real-world impact at its core — focused on empowering the next generation of African talent.
 
